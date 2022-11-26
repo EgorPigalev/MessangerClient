@@ -5,8 +5,8 @@
 
 int main()
 {
-	system("chcp 1251");
-	LPSTR lpszPipiName = "gff";
+	system("chcp 1251>null");
+	LPSTR lpszPipiName = L"\\\\.\\pipe\\MyPipe1";
 
 	BOOL flag_otvet = TRUE;
 	char message[SIZE_BUFFER];
@@ -14,7 +14,7 @@ int main()
 	DWORD actual_written;
 	LPWSTR buffer = (CHAR*)calloc(size_buffer, sizeof(CHAR));
 	DWORD actual_readen;
-	BOOL SeccessRead;
+	BOOL SuccessRead;
 	while (TRUE)
 	{
 		HANDLE hNamePipe = CreateFile(
@@ -42,7 +42,8 @@ int main()
 				WriteFile(hNamePipe, buffer, size_buffer, &actual_written, NULL);
 				flag_otvet = FALSE;
 			}
-			else
+			SuccessRead = ReadFile(hNamePipe, buffer, SIZE_BUFFER, &actual_readen, NULL);
+			if(SuccessRead)
 			{
 				printf("Сервер пишет: ");
 				printf(buffer);
@@ -54,7 +55,7 @@ int main()
 				}
 			}
 		}
-		Sleep(100);
+		Sleep(1000);
 		CloseHandle(hNamePipe);
 	}
 }
